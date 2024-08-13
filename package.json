@@ -4,8 +4,11 @@
   "main": "dist/app.js",
   "scripts": {
     "test": "jest",
-    "start": "nodemon src/app/listen.ts",
-    "build": "tsc --project tsconfig.json"
+    "seed": " ts-node src/app/db/seeds/seed.ts",
+    "drizzle:generate": "drizzle-kit generate",
+    "drizzle:migrate": "drizzle-kit migrate",
+    "start": "nodemon ./src/app/listen.ts",
+    "build": "tsc --project ./tsconfig.json"
   },
   "keywords": [],
   "author": "",
