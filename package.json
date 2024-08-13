@@ -3,10 +3,12 @@
   "version": "1.0.0",
   "main": "dist/app.js",
   "scripts": {
-    "test": "jest",
-    "seed": " ts-node src/app/db/seeds/seed.ts",
+    "test": "jest --forceExit",
+    "seed": "ts-node src/app/db/seeds/seed.ts",
+    "setup-db": "psql -f src/app/db/setup-db.sql",
     "drizzle:generate": "drizzle-kit generate",
     "drizzle:migrate": "drizzle-kit migrate",
+    "drizzle:migrate:test": "NODE_ENV=test drizzle-kit migrate",
     "start": "nodemon ./src/app/listen.ts",
     "build": "tsc --project ./tsconfig.json"
   },
@@ -17,18 +19,21 @@
   "dependencies": {
     "@types/express": "^4.17.21",
     "@types/jest": "^29.5.12",
+    "@types/supertest": "^6.0.2",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.33.0",
     "express": "^4.19.2",
     "jest": "^29.7.0",
     "nodemon": "^3.1.4",
     "pg": "^8.12.0",
-    "ts-jest": "^29.2.4"
+    "ts-jest": "^29.2.4",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/node": "^22.2.0",
     "@types/pg": "^8.11.6",
     "drizzle-kit": "^0.24.0",
+    "supertest": "^7.0.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4"
   }
