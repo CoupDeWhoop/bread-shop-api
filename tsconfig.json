@@ -1,9 +1,9 @@
 {
-  "compilerOptions": {
-    "esModuleInterop": true,
-    "rootDir": "src",
-    "outDir": "dist",
-    "strict": true
-  },
-  "include": ["src/**/*"]
+    "compilerOptions": {
+        "esModuleInterop": true,
+        "rootDir": "src",
+        "outDir": "dist",
+        "strict": true
+    },
+    "include": ["src/**/*"]
 }
