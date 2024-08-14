@@ -9,10 +9,13 @@ interface DatabaseError extends ErrorRequestHandler {
     status?: number;
 }
 
+app.use(express.json());
+
 app.get('/api/products', getAllProducts);
 app.post('/api/basket/items', addItemToBasket);
 app.use(
     (err: DatabaseError, req: Request, res: Response, next: NextFunction) => {
+        console.log(err);
         if (
             err.code === '22P02' ||
             err.code === '23502' ||

@@ -23,7 +23,7 @@ export async function insertItemInBasket({
         .from(baskets)
         .where(eq(baskets.userId, userId));
 
-    if (existingBasket) {
+    if (existingBasket.length > 0) {
         basket = existingBasket;
     } else {
         basket = await db
@@ -48,8 +48,8 @@ export async function insertItemInBasket({
         .innerJoin(basketItems, eq(baskets.id, basketItems.basketId))
         .where(eq(basketItems.productId, productId));
 
-    if (existingItem) {
-        await db
+    if (existingItem.length > 0) {
+        return await db
             .update(basketItems)
             .set({
                 quantity: existingItem[0].quantity + quantity,
@@ -57,7 +57,7 @@ export async function insertItemInBasket({
             })
             .where(eq(basketItems.id, existingItem[0].itemId));
     } else {
-        await db.insert(basketItems).values({
+        return await db.insert(basketItems).values({
             productId,
             basketId: basket[0].id,
             quantity,

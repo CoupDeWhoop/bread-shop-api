@@ -7,9 +7,8 @@ import * as model from '../src/app/models/app.model';
 beforeEach(() => seed());
 afterEach(() => jest.clearAllMocks());
 
-describe('Name of the group', () => {
+describe('GET /api/products', () => {
     test('200 - responds with array of products data', async () => {
-        await seed();
         const response = await request(app).get('/api/products').expect(200);
         const products: Product[] = response.body.products;
         expect(products).toHaveLength(3);
@@ -33,5 +32,26 @@ describe('Name of the group', () => {
         const response = await request(app).get('/api/products').expect(500);
 
         expect(response.body).toEqual({ message: 'Internal Server Error' });
+    });
+});
+
+describe('POST /api/basket/items', () => {
+    test('should post a new item to a new basket', async () => {
+        const itemToAdd = {
+            productId: 2,
+            quantity: 1,
+            userId: 'someUser',
+        };
+
+        const response = await request(app)
+            .post('/api/basket/items')
+            .send(itemToAdd)
+            .expect(201);
+        //   expect(response.body.lesson).toMatchObject({
+        //     lesson_id: 8,
+        //     user_id: decodedPayload.user_id,
+        //     lesson_timestamp: currentTimeStamp,
+        //     duration: 30,
+        //   });
     });
 });

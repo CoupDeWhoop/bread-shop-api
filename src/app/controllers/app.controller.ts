@@ -8,7 +8,7 @@ export async function getAllProducts(
 ) {
     try {
         const products = await fetchAllProducts();
-        res.status(200).json({ products });
+        res.status(200).send({ products });
     } catch (error) {
         next(error);
     }
@@ -21,7 +21,8 @@ export async function addItemToBasket(
 ) {
     const { productId, quantity, userId } = req.body; // todo move userId to auth
     try {
-        insertItemInBasket({ productId, quantity, userId });
+        const item = await insertItemInBasket({ productId, quantity, userId });
+        res.status(201).send({ item });
     } catch (error) {
         next(error);
     }
