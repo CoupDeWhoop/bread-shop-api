@@ -55,14 +55,18 @@ export async function insertItemInBasket({
                 quantity: existingItem[0].quantity + quantity,
                 updatedAt: new Date(),
             })
-            .where(eq(basketItems.id, existingItem[0].itemId));
+            .where(eq(basketItems.id, existingItem[0].itemId))
+            .returning();
     } else {
-        return await db.insert(basketItems).values({
-            productId,
-            basketId: basket[0].id,
-            quantity,
-            createdAt: new Date(),
-            updatedAt: new Date(),
-        });
+        return await db
+            .insert(basketItems)
+            .values({
+                productId,
+                basketId: basket[0].id,
+                quantity,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            })
+            .returning();
     }
 }

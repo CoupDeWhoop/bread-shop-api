@@ -47,11 +47,14 @@ describe('POST /api/basket/items', () => {
             .post('/api/basket/items')
             .send(itemToAdd)
             .expect(201);
-        //   expect(response.body.lesson).toMatchObject({
-        //     lesson_id: 8,
-        //     user_id: decodedPayload.user_id,
-        //     lesson_timestamp: currentTimeStamp,
-        //     duration: 30,
-        //   });
+        console.log(response.body.item);
+        expect(response.body.item).toMatchObject({
+            id: 1,
+            basketId: 1,
+            productId: 2,
+            quantity: 1,
+            createdAt: expect.any(String),
+            updatedAt: expect.any(String),
+        });
     });
 });
