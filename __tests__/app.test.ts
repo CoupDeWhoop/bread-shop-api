@@ -47,7 +47,6 @@ describe('POST /api/basket/items', () => {
             .post('/api/basket/items')
             .send(itemToAdd)
             .expect(201);
-        console.log(response.body.item);
         expect(response.body.item).toMatchObject({
             id: 1,
             basketId: 1,
@@ -56,5 +55,91 @@ describe('POST /api/basket/items', () => {
             createdAt: expect.any(String),
             updatedAt: expect.any(String),
         });
+    });
+
+    test.only('should handle adding multiple items', async () => {
+        const itemToAdd = {
+            productId: 2,
+            quantity: 1,
+            userId: 'someUser',
+        };
+
+        const itemToAdd2 = {
+            productId: 2,
+            quantity: 1,
+            userId: 'someUser',
+        };
+
+        const promises = [itemToAdd, itemToAdd2].map((item) =>
+            request(app).post('/api/basket/items').send(item).expect(201)
+        );
+
+        const responses = await Promise.all(promises);
+
+        expect(responses[1].body.item).toMatchObject({
+            basketId: 1,
+            productId: 2,
+            quantity: 2,
+            createdAt: expect.any(String),
+            updatedAt: expect.any(String),
+        });
+    });
+
+    test('should return 400 for invalid quantity', async () => {
+        const itemToAdd = {
+            productId: 2,
+            quantity: 0,
+            userId: 'someUser',
+        };
+
+        const response = await request(app)
+            .post('/api/basket/items')
+            .send(itemToAdd)
+            .expect(400);
+
+        expect(response.body.error).toBe('Invalid or missing quantity');
+    });
+
+    test('should return 400 for invalid product id', async () => {
+        const itemToAdd = {
+            productId: '£$',
+            quantity: 1,
+            userId: 'someUser',
+        };
+
+        const response = await request(app)
+            .post('/api/basket/items')
+            .send(itemToAdd)
+            .expect(400);
+
+        expect(response.body.error).toBe('Invalid or missing product ID');
+    });
+
+    test('should return 400 for missing product id', async () => {
+        const itemToAdd = {
+            quantity: 1,
+            userId: 'someUser',
+        };
+
+        const response = await request(app)
+            .post('/api/basket/items')
+            .send(itemToAdd)
+            .expect(400);
+
+        expect(response.body.error).toBe('Invalid or missing product ID');
+    });
+
+    test('should return 400 for missing user id', async () => {
+        const itemToAdd = {
+            productId: 2,
+            quantity: 1,
+        };
+
+        const response = await request(app)
+            .post('/api/basket/items')
+            .send(itemToAdd)
+            .expect(400);
+
+        expect(response.body.error).toBe('Invalid or missing user ID');
     });
 });

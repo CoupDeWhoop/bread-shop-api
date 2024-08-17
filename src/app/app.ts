@@ -2,6 +2,7 @@ import express from 'express';
 import { ErrorRequestHandler, Request, Response, NextFunction } from 'express';
 
 import { addItemToBasket, getAllProducts } from './controllers/app.controller';
+import { validateAddItemToBasket } from './utils/valididators';
 const app = express();
 
 interface DatabaseError extends ErrorRequestHandler {
@@ -12,7 +13,7 @@ interface DatabaseError extends ErrorRequestHandler {
 app.use(express.json());
 
 app.get('/api/products', getAllProducts);
-app.post('/api/basket/items', addItemToBasket);
+app.post('/api/basket/items', validateAddItemToBasket, addItemToBasket);
 app.use(
     (err: DatabaseError, req: Request, res: Response, next: NextFunction) => {
         console.log(err);
