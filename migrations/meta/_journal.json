@@ -5,15 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1723632414838,
-      "tag": "0000_fine_vermin",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1723632617409,
-      "tag": "0001_steep_beast",
+      "when": 1723973432978,
+      "tag": "0000_lowly_firebird",
       "breakpoints": true
     }
   ]

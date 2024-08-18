@@ -1,5 +1,5 @@
 {
-  "id": "31a9cf70-f2dd-454a-8bbd-41f7734f2a37",
+  "id": "b0de744e-ceb8-4011-8d57-d46a6fe8ae94",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -16,7 +16,7 @@
         },
         "basket_id": {
           "name": "basket_id",
-          "type": "integer",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
@@ -85,14 +85,8 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "uuid",
           "primaryKey": true,
-          "notNull": true
-        },
-        "userId": {
-          "name": "userId",
-          "type": "varchar",
-          "primaryKey": false,
           "notNull": true
         },
         "created_at": {
@@ -113,7 +107,15 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {
+        "baskets_id_unique": {
+          "name": "baskets_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "id"
+          ]
+        }
+      }
     },
     "public.products": {
       "name": "products",

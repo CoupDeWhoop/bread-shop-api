@@ -1,4 +1,6 @@
 import express from 'express';
+import cookieParser from 'cookie-parser';
+import { v4 } from 'uuid';
 import { ErrorRequestHandler, Request, Response, NextFunction } from 'express';
 
 import { addItemToBasket, getAllProducts } from './controllers/app.controller';
@@ -11,6 +13,18 @@ interface DatabaseError extends ErrorRequestHandler {
 }
 
 app.use(express.json());
+app.use(cookieParser());
+
+app.use((req: Request, res: Response, next: NextFunction) => {
+    if (!req.cookies.basketId) {
+        const basketId = v4();
+        res.cookie('basketId', basketId, {
+            httpOnly: true,
+        });
+        req.cookies.basketId = basketId;
+    }
+    next();
+});
 
 app.get('/api/products', getAllProducts);
 app.post('/api/basket/items', validateAddItemToBasket, addItemToBasket);

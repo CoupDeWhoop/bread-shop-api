@@ -5,6 +5,7 @@ import {
     varchar,
     integer,
     timestamp,
+    uuid,
 } from 'drizzle-orm/pg-core';
 
 export const products = pgTable('products', {
@@ -17,15 +18,14 @@ export const products = pgTable('products', {
 });
 
 export const baskets = pgTable('baskets', {
-    id: serial('id').primaryKey(),
-    userId: varchar('user_id').notNull(),
+    id: uuid('id').primaryKey().unique(),
     createdAt: timestamp('created_at').defaultNow().notNull(),
     updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
 
 export const basketItems = pgTable('basket_items', {
     id: serial('id').primaryKey(),
-    basketId: integer('basket_id')
+    basketId: uuid('basket_id')
         .references(() => baskets.id, { onDelete: 'cascade' })
         .notNull(),
     productId: integer('product_id')

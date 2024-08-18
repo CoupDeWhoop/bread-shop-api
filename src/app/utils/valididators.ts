@@ -5,7 +5,7 @@ export function validateAddItemToBasket(
     res: Response,
     next: NextFunction
 ) {
-    const { productId, quantity, userId } = req.body;
+    const { productId, quantity } = req.body;
 
     if (!productId || typeof productId !== 'number' || productId <= 0) {
         return res.status(400).send({ error: 'Invalid or missing product ID' });
@@ -13,10 +13,6 @@ export function validateAddItemToBasket(
 
     if (!quantity || typeof quantity !== 'number' || quantity <= 0) {
         return res.status(400).send({ error: 'Invalid or missing quantity' });
-    }
-
-    if (!userId) {
-        return res.status(400).send({ error: 'Invalid or missing user ID' });
     }
 
     next();

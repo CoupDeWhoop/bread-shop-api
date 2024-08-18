@@ -19,12 +19,13 @@ export async function addItemToBasket(
     res: Response,
     next: NextFunction
 ) {
-    const { productId, quantity, userId } = req.body; // todo move userId to auth
+    const { productId, quantity } = req.body;
+    const { basketId } = req.cookies;
     try {
         const [item] = await insertItemInBasket({
             productId,
             quantity,
-            userId,
+            basketId,
         });
 
         res.status(201).send({ item });

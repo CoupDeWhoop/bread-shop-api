@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS "basket_items" (
 	"id" serial PRIMARY KEY NOT NULL,
-	"basket_id" integer NOT NULL,
+	"basket_id" uuid NOT NULL,
 	"product_id" integer NOT NULL,
 	"quantity" integer NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
@@ -8,10 +8,10 @@ CREATE TABLE IF NOT EXISTS "basket_items" (
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "baskets" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"userId" varchar NOT NULL,
+	"id" uuid PRIMARY KEY NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL
+	"updated_at" timestamp DEFAULT now() NOT NULL,
+	CONSTRAINT "baskets_id_unique" UNIQUE("id")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "products" (

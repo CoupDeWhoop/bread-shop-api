@@ -1,1 +1,0 @@
-ALTER TABLE "baskets" RENAME COLUMN "userId" TO "user_id";

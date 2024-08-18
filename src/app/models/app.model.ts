@@ -1,3 +1,4 @@
+import { UUID } from 'crypto';
 import { db } from '../db/connection';
 import { products, basketItems, baskets } from '../db/schema';
 import { eq } from 'drizzle-orm';
@@ -7,12 +8,12 @@ export async function fetchAllProducts() {
 }
 type Basket = typeof baskets.$inferSelect;
 type BasketParams = {
-    userId: string;
+    basketId: UUID;
     productId: number;
     quantity: number;
 };
 export async function insertItemInBasket({
-    userId,
+    basketId,
     productId,
     quantity,
 }: BasketParams) {
@@ -21,7 +22,7 @@ export async function insertItemInBasket({
     const existingBasket = await db
         .select()
         .from(baskets)
-        .where(eq(baskets.userId, userId));
+        .where(eq(baskets.id, basketId));
 
     if (existingBasket.length > 0) {
         basket = existingBasket;
@@ -29,7 +30,7 @@ export async function insertItemInBasket({
         basket = await db
             .insert(baskets)
             .values({
-                userId,
+                id: basketId,
                 createdAt: new Date(),
                 updatedAt: new Date(),
             })
@@ -40,7 +41,6 @@ export async function insertItemInBasket({
         .select({
             itemId: basketItems.id,
             basketId: baskets.id,
-            userId: baskets.userId,
             productId: basketItems.productId,
             quantity: basketItems.quantity,
         })
