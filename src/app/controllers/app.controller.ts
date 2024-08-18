@@ -1,5 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
-import { fetchAllProducts, insertItemInBasket } from '../models/app.model';
+import {
+    fetchAllProducts,
+    fetchBasket,
+    insertItemInBasket,
+} from '../models/app.model';
 
 export async function getAllProducts(
     req: Request,
@@ -27,8 +31,21 @@ export async function addItemToBasket(
             quantity,
             basketId,
         });
-
         res.status(201).send({ item });
+    } catch (error) {
+        next(error);
+    }
+}
+
+export async function getBasket(
+    req: Request,
+    res: Response,
+    next: NextFunction
+) {
+    const { basketId } = req.cookies;
+    try {
+        const basket = await fetchBasket(basketId);
+        res.status(200).send({ basket });
     } catch (error) {
         next(error);
     }

@@ -1,7 +1,7 @@
 import { UUID } from 'crypto';
 import { db } from '../db/connection';
 import { products, basketItems, baskets } from '../db/schema';
-import { eq } from 'drizzle-orm';
+import { eq, and } from 'drizzle-orm';
 
 export async function fetchAllProducts() {
     return await db.select().from(products);
@@ -46,7 +46,12 @@ export async function insertItemInBasket({
         })
         .from(baskets)
         .innerJoin(basketItems, eq(baskets.id, basketItems.basketId))
-        .where(eq(basketItems.productId, productId));
+        .where(
+            and(
+                eq(basketItems.productId, productId),
+                eq(basketItems.basketId, basketId)
+            )
+        );
 
     if (existingItem.length > 0) {
         return await db
@@ -55,7 +60,12 @@ export async function insertItemInBasket({
                 quantity: existingItem[0].quantity + quantity,
                 updatedAt: new Date(),
             })
-            .where(eq(basketItems.id, existingItem[0].itemId))
+            .where(
+                and(
+                    eq(basketItems.id, existingItem[0].itemId),
+                    eq(basketItems.basketId, existingItem[0].basketId)
+                )
+            )
             .returning();
     } else {
         return await db
@@ -69,4 +79,12 @@ export async function insertItemInBasket({
             })
             .returning();
     }
+}
+
+export async function fetchBasket(basketId: UUID) {
+    const basket = await db
+        .select()
+        .from(basketItems)
+        .where(eq(basketItems.basketId, basketId));
+    return basket;
 }

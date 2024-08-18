@@ -3,7 +3,11 @@ import cookieParser from 'cookie-parser';
 import { v4 } from 'uuid';
 import { ErrorRequestHandler, Request, Response, NextFunction } from 'express';
 
-import { addItemToBasket, getAllProducts } from './controllers/app.controller';
+import {
+    addItemToBasket,
+    getAllProducts,
+    getBasket,
+} from './controllers/app.controller';
 import { validateAddItemToBasket } from './utils/valididators';
 const app = express();
 
@@ -23,10 +27,12 @@ app.use((req: Request, res: Response, next: NextFunction) => {
         });
         req.cookies.basketId = basketId;
     }
+
     next();
 });
 
 app.get('/api/products', getAllProducts);
+app.get('/api/basket', getBasket);
 app.post('/api/basket/items', validateAddItemToBasket, addItemToBasket);
 app.use(
     (err: DatabaseError, req: Request, res: Response, next: NextFunction) => {

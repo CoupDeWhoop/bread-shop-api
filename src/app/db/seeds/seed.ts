@@ -1,6 +1,6 @@
 import { db, Db } from '../connection';
 import { basketItems, baskets, products } from '../schema';
-import { productData } from '../data/seedData';
+import { basketData, basketItemsData, productData } from '../data/seedData';
 import { Table, getTableName, sql } from 'drizzle-orm';
 
 async function resetTable(db: Db, table: Table) {
@@ -17,7 +17,9 @@ export async function seed() {
         await resetTable(db, basketItems);
         await resetTable(db, baskets);
         await resetTable(db, products);
-        await db.insert(products).values(productData).returning();
+        await db.insert(products).values(productData);
+        await db.insert(baskets).values(basketData);
+        await db.insert(basketItems).values(basketItemsData);
     } catch (error) {
         console.error('Seeding failed:', error);
     }
