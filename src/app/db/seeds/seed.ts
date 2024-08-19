@@ -11,7 +11,7 @@ async function resetTable(db: Db, table: Table) {
     );
 }
 export async function seed() {
-    console.log('Seeding...');
+    if (process.env.NODE_ENV !== 'test') console.log('Seeding...');
 
     try {
         await resetTable(db, basketItems);

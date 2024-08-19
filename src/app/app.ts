@@ -7,6 +7,7 @@ import {
     addItemToBasket,
     getAllProducts,
     getBasket,
+    postCheckout,
 } from './controllers/app.controller';
 import { validateAddItemToBasket } from './utils/valididators';
 const app = express();
@@ -34,9 +35,9 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 app.get('/api/products', getAllProducts);
 app.get('/api/basket', getBasket);
 app.post('/api/basket/items', validateAddItemToBasket, addItemToBasket);
+app.post('/api/checkout', postCheckout);
 app.use(
     (err: DatabaseError, req: Request, res: Response, next: NextFunction) => {
-        console.log(err);
         if (
             err.code === '22P02' ||
             err.code === '23502' ||

@@ -162,3 +162,20 @@ describe('GET /api/basket', () => {
         });
     });
 });
+
+describe('POST /api/checkout', () => {
+    test('200 - should respond with a checkout url', async () => {
+        const expectedResponse = {
+            session: {
+                url: 'https://checkout.stripe.com/test_eVa5mb3n821W9tC4gr',
+                object: 'checkout.session',
+            },
+        };
+        const response = await request(app)
+            .post('/api/checkout')
+            .set('Cookie', `basketId=${testBasket}`)
+            .expect(200);
+
+        expect(response.body).toEqual(expectedResponse);
+    });
+});

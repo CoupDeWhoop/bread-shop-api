@@ -4,6 +4,7 @@ import {
     fetchBasket,
     insertItemInBasket,
 } from '../models/app.model';
+import { createCheckoutSession } from '../services/stripe.service';
 
 export async function getAllProducts(
     req: Request,
@@ -46,6 +47,26 @@ export async function getBasket(
     try {
         const basket = await fetchBasket(basketId);
         res.status(200).send({ basket });
+    } catch (error) {
+        next(error);
+    }
+}
+export async function postCheckout(
+    req: Request,
+    res: Response,
+    next: NextFunction
+) {
+    const { basketId } = req.cookies;
+    const basketItems = await fetchBasket(basketId);
+
+    if (basketItems.length === 0) {
+        return res.status(400).json({ error: 'Basket is empty' });
+    }
+
+    try {
+        const checkoutSession = await createCheckoutSession(basketItems);
+
+        res.status(200).send({ session: checkoutSession });
     } catch (error) {
         next(error);
     }

@@ -2,6 +2,7 @@ import { UUID } from 'crypto';
 import { db } from '../db/connection';
 import { products, basketItems, baskets } from '../db/schema';
 import { eq, and } from 'drizzle-orm';
+import { BasketItems } from '../../schema/product.schema';
 
 export async function fetchAllProducts() {
     return await db.select().from(products);
@@ -83,8 +84,19 @@ export async function insertItemInBasket({
 
 export async function fetchBasket(basketId: UUID) {
     const basket = await db
-        .select()
+        .select({
+            id: basketItems.id,
+            name: products.name,
+            description: products.description,
+            priceInPence: products.priceInPence,
+            basketId: basketItems.basketId,
+            productId: basketItems.productId,
+            quantity: basketItems.quantity,
+            createdAt: basketItems.createdAt,
+            updatedAt: basketItems.updatedAt,
+        })
         .from(basketItems)
+        .innerJoin(products, eq(products.id, basketItems.productId))
         .where(eq(basketItems.basketId, basketId));
     return basket;
 }
